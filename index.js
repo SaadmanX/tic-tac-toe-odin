@@ -12,14 +12,17 @@ function Gameboard() {
 			let pos = button.className;
 			let x = pos[1];
 			let y = pos[0];
-			button.textContent = player.sign;
 			this.board[y][x] = player.sign;
 			this.last_move = player.sign;
+			button.textContent = player.sign;
 
 			if (this.checkBoard() == 1) {
-				return "Game over! Player " + player.sign + " wins!";
+				player.score++;
+				return this.restartreq(
+					"Game over! Player " + player.sign + " wins!"
+				);
 			} else if (this.checkBoard() == -1) {
-				return "a draw";
+				return this.restartreq("a draw");
 			}
 		} else {
 			// Add shaking effect to signify that a move cannot be made
@@ -29,6 +32,15 @@ function Gameboard() {
 				button.classList.remove("shake-text");
 			}, 500); // Adjust this time as needed
 		}
+	};
+
+	this.restartreq = function (msg) {
+		board.style.display = "none";
+		start.style.display = null;
+		const restart = document.querySelector(".modal-content");
+		restart.textContent = "Restart!";
+		const message = document.querySelector(".players-message");
+		message.textContent = msg;
 	};
 
 	// 1 = win for the last player, 0 = game continues, -1 = draw
@@ -77,6 +89,7 @@ function Gameboard() {
 
 function Player(sign) {
 	this.sign = sign;
+	this.score = 0;
 }
 
 function handleClick(button) {
@@ -84,6 +97,10 @@ function handleClick(button) {
 	index = (index + 1) % 2;
 	return gameboard.playmove(button, current_player);
 }
+
+const start = document.querySelector(".start-container");
+const board = document.querySelector(".board");
+const scores = document.querySelector(".score");
 
 let gameboard = new Gameboard();
 
@@ -95,7 +112,26 @@ let players = [playX, playO];
 let index = 0;
 
 function game() {
-	const start = document.querySelector(".start-container");
+	const score_x = document.querySelector(".scorex");
+	const score_o = document.querySelector(".scoreo");
+
+	score_x.textContent = "X: " + playX.score;
+	score_o.textContent = "O: " + playO.score;
+
+	gameboard.board = [
+		["", "", ""],
+		["", "", ""],
+		["", "", ""],
+	];
+
+	gameboard.last_move = "";
+
+	// Get all buttons and set their text content to empty
+	let buttons = document.querySelectorAll(".board button");
+	buttons.forEach((button) => {
+		button.textContent = " ";
+	});
+
+	board.style.display = null;
 	start.style.display = "none";
 }
-// function to conduct the game

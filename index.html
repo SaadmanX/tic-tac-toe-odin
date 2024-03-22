@@ -11,6 +11,11 @@
     <body>
         <div class="container">
             <div class="board">
+                <div class="score">
+                    <p class="scorex"></p>
+                    <p class="scoreo"></p>
+                </div>
+        
                 <div class="row">
                     <button class="00" onclick="handleClick(this)"> </button>
                     <button class="01" onclick="handleClick(this)"> </button>
@@ -29,6 +34,7 @@
             </div>
         </div>
         <div class = "start-container">
+            <p class = "players-message"></p>
             <button class = "modal-content" onclick="game()">Start!</button>
         </div>
         <script src="index.js" async defer></script>
